@@ -18,7 +18,7 @@ while (true)
 
     AnsiConsole.Write(
         new Panel(
-            "[green]Felipe Vandevelde de Souza[/]\n" +
+            "[green]Felipe Vandevelde[/]\n" +
             "[green]Ramonys Santos[/]\n" +
             "[green]Artur Piumbini[/]")
         .Header("[white]ALUNOS[/]")
