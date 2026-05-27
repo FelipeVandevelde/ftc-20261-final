@@ -55,7 +55,6 @@ while (true)
             break;
 
         case "MT":
-            MT.Executar();
             MTScreen.Show();
             break;
 
