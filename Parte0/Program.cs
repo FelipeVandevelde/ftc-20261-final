@@ -1,9 +1,9 @@
 ﻿using Spectre.Console;
 using Parte0.Screens;
+using Parte0.Utils;
 using Parte1;
 using Parte2;
 using Parte3;
-
 
 while (true)
 {
@@ -45,8 +45,7 @@ while (true)
             break;
 
         case "AFD":
-            AFD.Executar();
-            AFDScreen.Show();
+            AFDScreen.afdUiUx();
             break;
 
         case "APD":
