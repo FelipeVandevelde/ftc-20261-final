@@ -31,7 +31,6 @@ while (true)
             .PageSize(10)
             .AddChoices(new[]
             {
-                "Teste",
                 "AFD",
                 "APD",
                 "MT",
@@ -45,7 +44,6 @@ while (true)
             break;
 
         case "APD":
-            APD.Executar();
             APDScreen.Show();
             break;
 
