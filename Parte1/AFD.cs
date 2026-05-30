@@ -11,7 +11,7 @@ public class AFD
 
     public AFD()
     {
-        Q = new string[] { "q0", "q1", "q2" };
+        Q = new string[] { "q-1", "q0", "q1", "q2" };
         Σ = new char[] { 'a', 'b' };
         δ[("q0", 'a')] = "q1";
         δ[("q0", 'b')] = "q0";
@@ -19,6 +19,7 @@ public class AFD
         δ[("q1", 'b')] = "q2";
         δ[("q2", 'a')] = "q1";
         δ[("q2", 'b')] = "q0";
+        δ[("*", '*')] = "q-1";
         I = "q0";
         F = "q2";
     }
@@ -82,7 +83,7 @@ public class AFD
         foreach (char simbolo in cadeia)
         {
             if (!δ.ContainsKey((estadoAtual, simbolo)))
-                return transicoes;
+                return transicoes.Append(δ[("", 'ε')]).ToArray();
             transicoes = transicoes.Append(δ[(estadoAtual, simbolo)]).ToArray();
             estadoAtual = δ[(estadoAtual, simbolo)];
         }

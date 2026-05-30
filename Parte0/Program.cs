@@ -40,10 +40,6 @@ while (true)
 
     switch (opcao)
     {
-        case "Teste":
-            TesteScreen.Show();
-            break;
-
         case "AFD":
             AFDScreen.afdUiUx();
             break;
