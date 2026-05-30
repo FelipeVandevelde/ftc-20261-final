@@ -14,7 +14,7 @@ public class AFDScreen
             AnsiConsole.Clear();
 
             AnsiConsole.Write(
-                new FigletText("FTC 2026/1")
+                new FigletText("Automato Finito Determinístico")
                     .Centered()
                     .Color(Color.Cyan1));
 
