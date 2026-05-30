@@ -15,11 +15,11 @@ public class  APD
 
 
     // Alfabeto de entrada Σ
-    public List<char> Alfabeto_Entrada { get; set; } = new List<char> {'a', 'b'};
+    public List<char> Alfabeto_Entrada { get; set; } = new List<char> { 'a', 'b' };
 
 
     // Alfabeto de pilha Γ
-    public List<char> Alfabeto_Pilha { get; set; } = new List<char>();
+    public List<char> Alfabeto_Pilha { get; set; } = new List<char> { 'Z', 'A', 'B' };
 
 
     // Função de transição δ
@@ -232,20 +232,20 @@ public class  APD
         {
             // Para q0 -> q0 lendo a
             { (q0, 'a', 'Z'),
-                new() { (q0, 'X', false) }
+                new() { (q0, 'A', false) }
             },
 
-            { (q0, 'a', 'X'),
-                new() {(q0, 'X', false) }
+            { (q0, 'a', 'A'),
+                new() {(q0, 'A', false) }
             },
 
             // Para q0 -> q1 lendo b
-            { (q0, 'b', 'X'),
+            { (q0, 'b', 'A'),
                 new() { (q1, null, true) }
             },
 
             // Para q1 -> q1 lendo b
-            { (q1, 'b', 'X'),
+            { (q1, 'b', 'A'),
                 new() {(q1, null, true) }
             },
 
