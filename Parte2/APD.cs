@@ -24,7 +24,7 @@ namespace Automato_De_Pilha
 
         // Função de transição δ
         public Dictionary<
-            (Estado estado, char? entrada, char topo),
+            (Estado estado, char entrada, char topo),
             List<(Estado proximo_estado,
                   char? simbolo_para_empilhar,
                   bool desempilhar)>
@@ -69,103 +69,153 @@ namespace Automato_De_Pilha
 
         public bool Executar(string entrada, string opcao)
         {
-            bool impar = false, par = false;
+            Estado Estado_Morto = new Estado("qM", false, false);
 
-            if (ValidaSimbolos(entrada, out par, out impar))
-            {
-                if (opcao == "1")
-                {
-                    MontarTransicoesL2();
-
-                    Estado Estado_Atual = this.Estado_Inicial;
-
-                    foreach (var simbolo in entrada)
-                    {
-                        char topo = Pilha.Peek();
-
-                        if (!Funcao_Transicao.TryGetValue(
-                            (Estado_Atual, simbolo, topo),
-                            out var transicoes))
-                        {
-                            return false;
-                        }
-
-                        var t = transicoes[0];
-
-                        if (t.desempilhar)
-                            Pilha.Pop();
-
-                        if (t.simbolo_para_empilhar.HasValue)
-                            Pilha.Push(t.simbolo_para_empilhar.Value);
-
-                        Estado_Atual = t.proximo_estado;
-                    }
-
-                    return Pilha.Count == 1 && Pilha.Peek() == Simbolo_Inicial_Pilha;
-                }
-                else if (opcao == "2")
-                {
-                    if(par)
-                        MontarTransicoesL3_Par();
-                    if (impar)
-                        MontarTransicoesL3_Impar();
-
-                    return ExecutarL3(this.Estado_Inicial, entrada, 0, Pilha);
-
-                    bool ExecutarL3(Estado Estado_Atual, string entrada, int posicao, Stack<char> Pilha)
-                    {
-                        // Aceita quando consumiu toda entrada e a pilha está logicamente vazia
-                        if (posicao == entrada.Length)
-                            return Pilha.Count == 1 && Pilha.Peek() == Simbolo_Inicial_Pilha;
-
-                        char simbolo = entrada[posicao];
-                        char topo = Pilha.Peek();
-
-                        // Se não existe transição, rejeita este caminho
-                        if (!Funcao_Transicao.TryGetValue(
-                            (Estado_Atual, simbolo, topo),
-                            out var transicoes))
-                        {
-                            return false;
-                        }
-
-                        // Testa todas as possibilidades
-                        foreach (var t in transicoes)
-                        {
-                            // Clonar a pilha para que cada caminho possível tenha sua própria pilha independente.
-                            Stack<char> Nova_Pilha =
-                                new Stack<char>(Pilha.Reverse());
-
-                            // Se a transição pede para desempilhar, faça isso
-                            if (t.desempilhar)
-                                Nova_Pilha.Pop();
-
-                            // Se a transição pede para empilhar, faça isso
-                            if (t.simbolo_para_empilhar.HasValue)
-                                Nova_Pilha.Push(
-                                    t.simbolo_para_empilhar.Value
-                                );
-
-                            // Recursividade para que o APND verifique vários caminhos possíveis ao mesmo tempo.
-                            if (ExecutarL3(t.proximo_estado, entrada, posicao+1, Nova_Pilha))
-                                return true;
-                        }
-
-                        return false;
-                    }
-                }
-                else
-                {
-                    Console.Write("Encerrando Programa...");
-                    Thread.Sleep(2000);
-                    return false;
-                }
-            }
+            if (opcao == "1")
+                MontarTransicoesL2();
+            else if (opcao == "2")
+                MontarTransicoesL3();
             else
             {
-                Console.Clear();
-                Console.Write("Alguns simbolos não pertencem ao Alfabeto de entrada.\n\n");
-                Thread.Sleep(3000);
+                Console.Write("Encerrando Programa...");
+                Thread.Sleep(2000);
+                return false;
+            }
+
+            ConfiguracaoInstantanea(
+                this.Estado_Inicial,
+                entrada,
+                Pilha
+            );
+
+            return ExecutarAPND(
+                this.Estado_Inicial,
+                entrada,
+                0,
+                Pilha
+            );
+
+            bool ExecutarAPND(
+                Estado Estado_Atual,
+                string entrada,
+                int posicao,
+                Stack<char> Pilha)
+            {
+                if (Pilha.Count == 0)
+                    return posicao == entrada.Length;
+
+                char topo = Pilha.Peek();
+
+                // Lista contendo transições normais e λ
+                List<(
+                    Estado proximo_estado,
+                    char? simbolo_para_empilhar,
+                    bool desempilhar,
+                    bool consomeEntrada
+                )> transicoes = new();
+
+                // Busca transições normais somente se ainda existe entrada
+                if (posicao < entrada.Length)
+                {
+                    char simbolo = entrada[posicao];
+
+                    if (Funcao_Transicao.TryGetValue(
+                        (Estado_Atual, simbolo, topo),
+                        out var transicoesNormais))
+                    {
+                        foreach (var t in transicoesNormais)
+                        {
+                            transicoes.Add((
+                                t.proximo_estado,
+                                t.simbolo_para_empilhar,
+                                t.desempilhar,
+                                true
+                            ));
+                        }
+                    }
+                }
+
+                // Busca λ-transições
+                if (Funcao_Transicao.TryGetValue(
+                    (Estado_Atual, '\0', topo),
+                    out var transicoesLambda))
+                {
+                    foreach (var t in transicoesLambda)
+                    {
+                        transicoes.Add((
+                            t.proximo_estado,
+                            t.simbolo_para_empilhar,
+                            t.desempilhar,
+                            false
+                        ));
+                    }
+                }
+
+                // Aceita somente quando toda entrada foi consumida e pilha ficou vazia
+                if (posicao == entrada.Length
+                    && transicoes.Count == 0)
+                {
+                    return Pilha.Count == 0;
+                }
+
+                // Se não existe nenhuma transição possível
+                if (transicoes.Count == 0)
+                {
+                    Estado_Atual = Estado_Morto;
+
+                    ConfiguracaoInstantanea(
+                        Estado_Atual,
+                        entrada.Substring(posicao),
+                        Pilha
+                    );
+
+                    return false;
+                }
+
+                // Testa todas as possibilidades
+                foreach (var t in transicoes)
+                {
+                    // Clonar a pilha para que cada caminho possível tenha sua própria pilha independente.
+                    Stack<char> Nova_Pilha =
+                        new Stack<char>(Pilha.Reverse());
+
+                    // Se a transição pede para desempilhar, faça isso
+                    if (t.desempilhar)
+                        Nova_Pilha.Pop();
+
+                    // Se a transição pede para empilhar, faça isso
+                    if (t.simbolo_para_empilhar.HasValue)
+                        Nova_Pilha.Push(
+                            t.simbolo_para_empilhar.Value
+                        );
+
+                    int proximaPosicao =
+                        t.consomeEntrada
+                            ? posicao + 1
+                            : posicao;
+
+                    string entradaRestante =
+                        proximaPosicao < entrada.Length
+                            ? entrada.Substring(proximaPosicao)
+                            : "";
+
+                    ConfiguracaoInstantanea(
+                        t.proximo_estado,
+                        entradaRestante,
+                        Nova_Pilha
+                    );
+
+                    // Recursividade para que o APND verifique vários caminhos possíveis ao mesmo tempo.
+                    if (ExecutarAPND(
+                        t.proximo_estado,
+                        entrada,
+                        proximaPosicao,
+                        Nova_Pilha))
+                    {
+                        return true;
+                    }
+                }
+
                 return false;
             }
         }
@@ -197,166 +247,141 @@ namespace Automato_De_Pilha
                 // Para q1 -> q1 lendo b
                 { (q1, 'b', 'X'),
                     new() {(q1, null, true) }
-                }
-            };
-        }
-
-        public void MontarTransicoesL3_Impar()
-        {
-            Pilha.Clear();
-            Pilha.Push(this.Simbolo_Inicial_Pilha);
-            Funcao_Transicao.Clear();
-            Estado q0 = this.Estado_Inicial;
-            Estado q1 = new Estado("q1", false, false);
-
-            this.Funcao_Transicao = new()
-            {
-                { (q0, 'a', 'Z'),
-                    new()
-                    {
-                        (q0, 'A', false),
-                        (q1, null, false)
-                    }
                 },
 
-                { (q0, 'a', 'A'),
-                    new()
-                    {
-                        (q0, 'A', false),
-                        (q1, null, false)
-                    }
-                },
-
-                { (q0, 'a', 'B'),
-                    new()
-                    {
-                        (q0, 'A', false),
-                        (q1, null, false)
-                    }
-                },
-
-                { (q0, 'b', 'Z'),
-                    new() { (q0, 'B', false) }
-                },
-
-                { (q0, 'b', 'A'),
-                    new()
-                    {
-                        (q0, 'B', false),
-                        (q1, null, false)
-                    }
-                },
-
-                { (q0, 'b', 'B'),
-                    new()
-                    {
-                        (q0, 'B', false),
-                        (q1, null, false)
-                    }
-                },
-
-                { (q0, null, 'A'),
-                    new() { (q1, null, false) }
-                },
-
-                { (q0, null, 'B'),
-                    new() { (q1, null, false) }
-                },
-
-                { (q1, 'a', 'A'),
+                // Para remover Z no final do processamento
+                { (q1, '\0', 'Z'),
                     new() { (q1, null, true) }
-                },
-
-                { (q1, 'b', 'B'),
-                    new() { (q1, null, true) } 
                 }
             };
         }
 
-        public void MontarTransicoesL3_Par()
+        public void MontarTransicoesL3()
         {
             Pilha.Clear();
             Pilha.Push(this.Simbolo_Inicial_Pilha);
             Funcao_Transicao.Clear();
+
             Estado q0 = this.Estado_Inicial;
             Estado q1 = new Estado("q1", false, false);
 
             this.Funcao_Transicao = new()
-    {
-        // empilha
-        {
-            (q0, 'a', 'Z'),
-            new() { (q0, 'A', false) }
-        },
-
-        {
-            (q0, 'b', 'Z'),
-            new() { (q0, 'B', false) }
-        },
-
-        {
-            (q0, 'a', 'A'),
-            new()
             {
-                (q0, 'A', false),
-                (q1, null, true)
-            }
-        },
+                // q0 -> q0 (empilha)
+                {
+                    (q0, 'a', 'Z'),
+                    new()
+                    {
+                        (q0, 'A', false),
+                        (q1, null, false)   // palavra "a"
+                    }
+                },
 
-        {
-            (q0, 'a', 'B'),
-            new()
-            {
-                (q0, 'A', false)
-            }
-        },
+                {
+                    (q0, 'a', 'A'),
+                    new()
+                    {
+                        (q0, 'A', false),
+                        (q1, null, false)   // centro ímpar
+                    }
+                },
 
-        {
-            (q0, 'b', 'B'),
-            new()
-            {
-                (q0, 'B', false),
-                (q1, null, true)
-            }
-        },
+                {
+                    (q0, 'a', 'B'),
+                    new()
+                    {
+                        (q0, 'A', false),
+                        (q1, null, false)   // centro ímpar
+                    }
+                },
 
-        {
-            (q0, 'b', 'A'),
-            new()
-            {
-                (q0, 'B', false)
-            }
-        },
+                {
+                    (q0, 'b', 'Z'),
+                    new()
+                    {
+                        (q0, 'B', false),
+                        (q1, null, false)   // palavra "b"
+                    }
+                },
 
-        // comparação
-        {
-            (q1, 'a', 'A'),
-            new() { (q1, null, true) }
-        },
+                {
+                    (q0, 'b', 'A'),
+                    new()
+                    {
+                        (q0, 'B', false),
+                        (q1, null, false)   // centro ímpar
+                    }
+                },
 
-        {
-            (q1, 'b', 'B'),
-            new() { (q1, null, true) }
+                {
+                    (q0, 'b', 'B'),
+                    new()
+                    {
+                        (q0, 'B', false),
+                        (q1, null, false)   // centro ímpar
+                    }
+                },
+
+                // λ-transições caso par
+                {
+                    (q0, '\0', 'A'),
+                    new()
+                    {
+                        (q1, null, false)
+                    }
+                },
+
+                {
+                    (q0, '\0', 'B'),
+                    new()
+                    {
+                        (q1, null, false)
+                    }
+                },
+
+                // q1 -> q1 (compara)
+                {
+                    (q1, 'a', 'A'),
+                    new()
+                    {
+                        (q1, null, true)
+                    }
+                },
+
+                {
+                    (q1, 'b', 'B'),
+                    new()
+                    {
+                        (q1, null, true)
+                    }
+                },
+
+                // Remove Z no final
+                {
+                    (q1, '\0', 'Z'),
+                    new()
+                    {
+                        (q1, null, true)
+                    }
+                }
+            };
         }
-    };
-        }
 
-        public bool ValidaSimbolos(string entrada, out bool tamanhoPar, out bool tamanhoImpar)
+        public void ConfiguracaoInstantanea(
+            Estado estado,
+            string entradaRestante,
+            Stack<char> Pilha)
         {
-            if(entrada.Length % 2 == 0)
-            {
-                tamanhoPar = true; tamanhoImpar = false;
-            }
-            else
-            {
-                tamanhoImpar = true; tamanhoPar = false;
-            }
+            if (entradaRestante.Length == 0)
+                entradaRestante = "\\0";
 
-            foreach (var simbolo in entrada)
-                if (!Alfabeto_Entrada.Contains(simbolo))
-                    return false;
+            string pilha = Pilha.Count == 0
+                ? "\\0"
+                : string.Join("", Pilha.Reverse());
 
-            return true;
+            Console.WriteLine(
+                $"\n({estado.Nome}, {entradaRestante}, {pilha})"
+            );
         }
 
         #endregion
