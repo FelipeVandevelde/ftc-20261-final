@@ -6,7 +6,7 @@ namespace Parte0.Screens;
 
 public class AFDScreen
 {
-    public static void afdUiUx()
+    public static void Show()
     {
         AFD afd = new AFD();
         while (true)
