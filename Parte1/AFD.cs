@@ -83,7 +83,7 @@ public class AFD
         foreach (char simbolo in cadeia)
         {
             if (!δ.ContainsKey((estadoAtual, simbolo)))
-                return transicoes.Append(δ[("", 'ε')]).ToArray();
+                return transicoes.Append(δ[("*", '*')]).ToArray();
             transicoes = transicoes.Append(δ[(estadoAtual, simbolo)]).ToArray();
             estadoAtual = δ[(estadoAtual, simbolo)];
         }

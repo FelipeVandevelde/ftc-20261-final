@@ -126,7 +126,7 @@ public class AFDScreen
     
     private static void selecionarArquivo(AFD afd)
     {
-        string? arquivo = FilePicker.Open();
+        string? arquivo = FilePicker.Open(Path.Combine(Directory.GetCurrentDirectory(), "exemplos"), "*.txt");
 
         if (arquivo == null)
         {
