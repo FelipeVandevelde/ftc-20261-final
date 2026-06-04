@@ -117,6 +117,7 @@ public class APDScreen
 
     public static void ApresentarTabelaDeAceitacao(string conteudo, APD apd, string linguagem)
     {
+        AnsiConsole.Clear();
         string[] linhas = conteudo
             .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
@@ -130,10 +131,14 @@ public class APDScreen
 
         for (int i = 0; i < linhas.Length; i++)
         {
+            AnsiConsole.MarkupLine(
+                $"[green]'{linhas[i]}':[/]");
             tabela.AddRow(
                 linhas[i],
                 apd.Executar(linhas[i], linguagem) ? "[green]Aceita[/]" : "[red]Rejeita[/]"
             );
+            AnsiConsole.MarkupLine(
+                "\n\n");
         }
 
         AnsiConsole.Write(tabela);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Parte2;
 
-public class  APD
+public class APD
 {
     #region 7-tupla do APD
 
@@ -373,9 +373,18 @@ public class  APD
             ? "\\0"
             : string.Join("", Pilha.Reverse());
 
-        Console.WriteLine(
-            $"\n({estado.Nome}, {entradaRestante}, {pilha})"
-        );
+        if (estado.Nome == "qM")
+        {
+            Console.WriteLine(
+                $"\n({estado.Nome}, {entradaRestante}, {pilha}) -> Ramo rejeitado"
+            );
+        }
+        else
+        {
+                Console.WriteLine(
+                    $"\n({estado.Nome}, {entradaRestante}, {pilha})"
+                );
+        }
     }
 
     #endregion
