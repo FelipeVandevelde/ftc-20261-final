@@ -58,10 +58,15 @@ public class APDScreen
 
     private static void validarPalavra(APD apd)
     {
+        string linguagem = SelecionarLinguagem();
+        if (linguagem == "0")
+        {
+            return;
+        }
+
         string palavra = AnsiConsole.Ask<string>(
             "[yellow]Digite a palavra para validação:[/]");
 
-        string linguagem = validarOpcao(apd);
         
         bool resultado = apd.Executar(palavra, linguagem);
 
@@ -79,26 +84,14 @@ public class APDScreen
         end();
     }
 
-    private static string validarOpcao(APD apd)
-    {
-        AnsiConsole.MarkupLine(
-                "Digite 1  ->  L₂ = { aⁿbⁿ | n ≥ 1 }\nDigite 2  ->  L₃ = { w ∈ {a,b}* | w = wᴿ, |w| >= 1 }");
-        
-        string linguagem = AnsiConsole.Ask<string>(
-            "[yellow]Escolha uma linguagem:[/]");
-        
-        if (linguagem != "1" && linguagem != "2")
-        {
-            AnsiConsole.MarkupLine(
-                "[red]Opção inválida. Por favor, escolha '1' ou '2'.[/]");
-            return validarOpcao(apd);
-        }
-        return linguagem;
-    }
-
     private static void selecionarArquivo(APD apd)
     {
-        string? arquivo = FilePicker.Open();
+        string linguagem = SelecionarLinguagem();
+        if (linguagem == "0")
+        {
+            return;
+        }
+        string? arquivo = FilePicker.Open(Path.Combine(Directory.GetCurrentDirectory(), "exemplos"), "*.txt");
 
         if (arquivo == null)
         {
@@ -110,7 +103,6 @@ public class APDScreen
             $"[green]Arquivo:[/] {arquivo}");            
 
         string conteudo = File.ReadAllText(arquivo);
-        string linguagem = validarOpcao(apd);
         ApresentarTabelaDeAceitacao(conteudo, apd, linguagem);
         end();
     }
@@ -142,6 +134,37 @@ public class APDScreen
         }
 
         AnsiConsole.Write(tabela);
+    }
+
+    private static string SelecionarLinguagem()
+    {
+        string linguagem = "";
+        var opcao = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[yellow]Escolha uma linguagem:\nL₂ = { aⁿbⁿ | n ≥ 1 }\nL₃ = { w ∈ {a,b}* | w = wᴿ, |w| >= 1 }[/]")
+                    .PageSize(10)
+                    .AddChoices(new[]
+                    {
+                        "L₂",
+                        "L₃",
+                        "Voltar"
+                    }));
+
+        switch (opcao)
+        {
+            case "L₂":
+                linguagem = "1";
+                break;
+
+            case "L₃":
+                linguagem = "2";
+                break;
+
+            case "Voltar":
+                linguagem = "0";
+                break;
+        }
+        return linguagem;
     }
 
     private static void end()

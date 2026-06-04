@@ -2,9 +2,9 @@
 Repositorio academico da disciplina FTC, organizado como solucao .NET modular com interface de terminal e componentes separados para AFD, APD e MT.
 
 ## 1. Integrantes
-- Felipe Vandevelde
-- Ramonys Santos
-- Artur Piumbini
+- Felipe Vandevelde - 72301201
+- Ramonys Santos - 72301104
+- Artur Piumbini - 72400609
 
 ## 2. Estrutura do Projeto
 ```text
