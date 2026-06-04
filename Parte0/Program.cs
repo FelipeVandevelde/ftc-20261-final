@@ -18,9 +18,9 @@ while (true)
 
     AnsiConsole.Write(
         new Panel(
-            "[green]Felipe Vandevelde[/]\n" +
-            "[green]Ramonys Santos[/]\n" +
-            "[green]Artur Piumbini[/]")
+            "[green]Felipe Vandevelde - 72301201[/]\n" +
+            "[green]Ramonys Santos - 72301104[/]\n" +
+            "[green]Artur Piumbini - 72400609[/]")
         .Header("[white]ALUNOS[/]")
         .Border(BoxBorder.Double)
         .Expand());
@@ -44,7 +44,7 @@ while (true)
             break;
 
         case "APD":
-            APDScreen.Show();
+            APDScreen.apdUiUx();
             break;
 
         case "MT":

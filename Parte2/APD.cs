@@ -73,14 +73,8 @@ public class  APD
 
         if (opcao == "1")
             MontarTransicoesL2();
-        else if (opcao == "2")
-            MontarTransicoesL3();
         else
-        {
-            Console.Write("Encerrando Programa...");
-            Thread.Sleep(2000);
-            return false;
-        }
+            MontarTransicoesL3();
 
         ConfiguracaoInstantanea(
             this.Estado_Inicial,
