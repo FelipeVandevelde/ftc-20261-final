@@ -6,7 +6,7 @@ namespace Parte0.Screens;
 
 public class AFDScreen
 {
-    public static void afdUiUx()
+    public static void Show()
     {
         AFD afd = new AFD();
         while (true)
@@ -126,7 +126,7 @@ public class AFDScreen
     
     private static void selecionarArquivo(AFD afd)
     {
-        string? arquivo = FilePicker.Open();
+        string? arquivo = FilePicker.Open(Path.Combine(Directory.GetCurrentDirectory(), "exemplos"), "*.txt");
 
         if (arquivo == null)
         {

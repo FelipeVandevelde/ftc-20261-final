@@ -14,6 +14,11 @@ ftc-20261-final/
 |-- README.md
 |-- docs/
 |   `-- relatorio.md
+|-- exemplos/                      # Casos de teste do pdf
+|   |-- entradas_af.txt
+|   |-- entradas_ap1.txt
+|   |-- entradas_ap2.txt
+|   `-- entradas_mt.txt
 |-- Parte0/                        # Ponto de entrada (UI em console)
 |   |-- Parte0.csproj
 |   |-- Program.cs
@@ -26,6 +31,7 @@ ftc-20261-final/
 |   `-- AFD.cs
 |-- Parte2/                        # Modulo APD
 |   |-- Parte2.csproj
+|   |-- Estado.cs
 |   `-- APD.cs
 `-- Parte3/                        # Modulo MT
     |-- Parte3.csproj
@@ -34,14 +40,14 @@ ftc-20261-final/
 
 ## 3. Tecnologias
 - **Linguagem:** C#
-- **SDK:** .NET 10 (`net10.0`)
+- **SDK:** .NET 8 (`net8`)
 - **Interface de terminal:** Spectre.Console
 - **Build e execucao:** `dotnet` CLI com projetos no formato SDK (`.csproj`)
 - **Solucoes:** `.sln` (por modulo) e `.slnx` (solucao principal)
 
 ## 4. Como Executar
 ### Pre-requisitos
-- .NET SDK 10.0 (ou superior) instalado
+- [.NET SDK 8.0](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0?utm_source=chatgpt.com) (ou superior) instalado
 
 ### Instalacao
 ```bash
@@ -63,10 +69,10 @@ O projeto segue uma abordagem de **monolito modular**, com separacao clara entre
 - `Parte0` referencia os modulos por `ProjectReference`, centralizando a integracao.
 
 Fluxo principal:
-1. `Program.cs` exibe o menu com Spectre.Console.
-2. O usuario escolhe uma opcao (`Teste`, `AFD`, `APD`, `MT` ou `Sair`).
-3. O modulo correspondente executa (`AFD.Executar()`, `APD.Executar()`, `MT.Executar()`).
-4. A tela especifica (`Screen`) mostra o retorno e devolve o controle ao menu principal.
+1. O `Program.cs` exibe o menu utilizando o `Spectre.Console`.
+2. O usuário escolhe uma opção (`AFD`, `APD`, `MT` ou `Sair`).
+3. O módulo correspondente é executado (`AFDScreen.Show()`, `APDScreen.Show()`, `MTScreen.Show()`).
+4. As telas dentro da pasta `Screen` servem como uma forma organizada de separar cada layout e são utilizadas para que o usuário possa interagir com a lógica de cada módulo.
 
 Essa organizacao facilita evolucao incremental por parte (cada modulo pode crescer sem acoplamento excessivo com os demais).
 
@@ -85,7 +91,7 @@ Estado atual observado no codigo:
 ## 7. Dependencias
 - `Spectre.Console` `0.55.2`
 - `Microsoft.NET.Sdk` (infraestrutura de build dos projetos)
-- `net10.0` (framework alvo)
+- `net8.0` (framework alvo)
 
 ## 8. Licenca
 Este projeto esta licenciado sob a **MIT License**. Consulte o arquivo [LICENSE](LICENSE) para detalhes completos.
