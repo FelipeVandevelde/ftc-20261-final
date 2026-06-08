@@ -104,8 +104,9 @@ public class AFDScreen
 
     private static void validarPalavra(AFD afd)
     {
-        string palavra = AnsiConsole.Ask<string>(
-            "[yellow]Digite a palavra para validação:[/]");
+        string palavra = AnsiConsole.Prompt(
+            new TextPrompt<string>("[yellow]Digite a palavra para validação:[/]")
+            .AllowEmpty());
 
         string[] transicoes = afd.ObterTransicoes(palavra);
         bool resultado = afd.Aceitar(transicoes);
