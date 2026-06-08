@@ -107,19 +107,15 @@ public class MTScreen
             case "MT aⁿbⁿcⁿ":
                 // Configura a MT com os estados, alfabeto, transições e outros parâmetros necessários
                 var mtr = new MT();
-                mtr.LimitePassos = int.Parse(AnsiConsole.Ask<string>("Digite o [yellow]limite de passos[/]: ")); // Limite de passos configuravelpara evitar loops infinitos
-                entrada = AnsiConsole.Prompt(
-                    new TextPrompt<string>("Digite a [yellow]palavra[/] de entrada (use _ para branco): ")
-                    .AllowEmpty()); // Entrada da palavra teste do usuário
+                mtr.MTReconhecedora = true;
 
-                mtr.MTReconhecedora = true; // Define que é uma máquina reconhecedora ou transdutora (Definido para facilitar a exibição do resultado final formatado, sem precisar criar uma classe separada para MT transdutora)
-                mtr.AdicionarEstados("1", "2", "3", "4", "5", "6", "7", "8", "rej"); // Estados da MT
-                mtr.AdicionarAlfabetoEntrada('a', 'b', 'c'); // Alfabeto de entrada
-                mtr.AdicionarAlfabetoFita('a', 'b', 'c', 'X', 'Y', '_'); // Alfabeto da fita (inclui símbolos de marcação e branco)
-                mtr.EstadoInicial = mtr.ObterEstado("1"); // Estado inicial
-                mtr.EstadoAceitacao = mtr.ObterEstado("8"); // Estado de aceitação
-                mtr.EstadoRejeicao = mtr.ObterEstado("rej"); // Estado de rejeição
-                // Transições da MT no formato (EstadoAtual, SimboloLido, NovoEstado, NovoSimbolo, Direcao)
+                mtr.AdicionarEstados("1", "2", "3", "4", "5", "6", "7", "8", "rej");
+                mtr.AdicionarAlfabetoEntrada('a', 'b', 'c');
+                mtr.AdicionarAlfabetoFita('a', 'b', 'c', 'X', 'Y', '_');
+                mtr.EstadoInicial = mtr.ObterEstado("1");
+                mtr.EstadoAceitacao = mtr.ObterEstado("8");
+                mtr.EstadoRejeicao = mtr.ObterEstado("rej");
+                // (EstadoAtual, SimboloLido, NovoEstado, NovoSimbolo, Direcao)
                 mtr.AdicionarTransicao("1", 'a', "2", 'Y', 'R');
                 mtr.AdicionarTransicao("2", 'a', "2", 'a', 'R');
                 mtr.AdicionarTransicao("2", 'X', "2", 'X', 'R');
