@@ -42,7 +42,7 @@ ftc-20261-final/
 `-- Parte3/                        # Modulo MT
     |-- Parte3.csproj
     |-- Parte3.sln
-|   |-- reflexiva.md
+    |-- reflexiva.md
     `-- MT.cs
 ```
 
