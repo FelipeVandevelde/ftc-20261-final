@@ -84,8 +84,8 @@ public class MTScreen
                 AnsiConsole.WriteLine();
                 AnsiConsole.MarkupLine("[grey] Maquina transdutora da função f(n) = n + 1[/]");
                 AnsiConsole.MarkupLine("[grey] Q = {0,1,rej}[/]");
-                AnsiConsole.MarkupLine("[grey] Σ = {0,1}[/]");
-                AnsiConsole.MarkupLine("[grey] Γ = {0,1,_}[/]");
+                AnsiConsole.MarkupLine("[grey] Σ = {1}[/]");
+                AnsiConsole.MarkupLine("[grey] Γ = {1,_}[/]");
                 AnsiConsole.MarkupLine("[grey] q0 = 0[/]");
                 AnsiConsole.MarkupLine("[grey] qaccept = 1[/]");
                 AnsiConsole.MarkupLine("[grey] qreject = rej[/]");
@@ -94,7 +94,6 @@ public class MTScreen
                 table.Rows.Clear();
                 table.AddRow("0", "1", "0", "1", "R");
                 table.AddRow("0", "_", "1", "1", "R");
-                table.AddRow("0", "0", "1", "1", "R");
                 AnsiConsole.Write(table);
 
                 AnsiConsole.WriteLine();
