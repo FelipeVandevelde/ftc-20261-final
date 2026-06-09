@@ -68,7 +68,6 @@ public class APDScreen
             new TextPrompt<string>("[yellow]Digite a palavra para validação:[/]")
             .AllowEmpty());
 
-        
         bool resultado = apd.Executar(palavra, linguagem);
 
         if (resultado)
