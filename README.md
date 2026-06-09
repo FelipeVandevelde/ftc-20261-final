@@ -18,7 +18,6 @@ ftc-20261-final/
 |   |-- entradas_af.txt            # Entradas para o AFD
 |   |-- entradas_ap1.txt           # Entradas para o APD (L2 = a^n b^n)
 |   |-- entradas_ap2.txt           # Entradas para o APD (L3 = palindromos)
-|   `-- entradas_mt.txt            # Entradas para a MT (a^n b^n c^n)
 |-- Parte0/                        # Ponto de entrada (UI em console)
 |   |-- Parte0.csproj
 |   |-- Parte0.sln                 # Solucao individual do modulo
