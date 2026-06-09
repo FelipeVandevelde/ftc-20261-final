@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+using Spectre.Console;
 using Parte0.Screens;
 using Parte0.Utils;
 using Parte1;
@@ -44,7 +44,7 @@ while (true)
             break;
 
         case "APD":
-            APDScreen.apdUiUx();
+            APDScreen.Show();
             break;
 
         case "MT":

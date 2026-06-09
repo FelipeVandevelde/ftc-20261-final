@@ -9,32 +9,38 @@ Repositorio academico da disciplina FTC, organizado como solucao .NET modular co
 ## 2. Estrutura do Projeto
 ```text
 ftc-20261-final/
-|-- Sistema.slnx
+|-- Sistema.slnx                   # Solucao principal (.slnx)
 |-- LICENSE
 |-- README.md
 |-- docs/
 |   `-- relatorio.md
 |-- exemplos/                      # Casos de teste do pdf
-|   |-- entradas_af.txt
-|   |-- entradas_ap1.txt
-|   |-- entradas_ap2.txt
-|   `-- entradas_mt.txt
+|   |-- entradas_af.txt            # Entradas para o AFD
+|   |-- entradas_ap1.txt           # Entradas para o APD (L2 = a^n b^n)
+|   |-- entradas_ap2.txt           # Entradas para o APD (L3 = palindromos)
+|   `-- entradas_mt.txt            # Entradas para a MT (a^n b^n c^n)
 |-- Parte0/                        # Ponto de entrada (UI em console)
 |   |-- Parte0.csproj
+|   |-- Parte0.sln                 # Solucao individual do modulo
 |   |-- Program.cs
-|   `-- Screens/                   # Screens de UI para o console
-|       |-- AFDScreen.cs
-|       |-- APDScreen.cs
-|       `-- MTScreen.cs
+|   |-- Screens/                   # Screens de UI para o console
+|   |   |-- AFDScreen.cs
+|   |   |-- APDScreen.cs
+|   |   `-- MTScreen.cs
+|   `-- Utils/                     # Utilitarios de UI
+|       `-- FilePicker.cs          # Seletor de arquivos TUI (Spectre.Console)
 |-- Parte1/                        # Modulo AFD
 |   |-- Parte1.csproj
+|   |-- Parte1.sln
 |   `-- AFD.cs
 |-- Parte2/                        # Modulo APD
 |   |-- Parte2.csproj
+|   |-- Parte2.sln
 |   |-- Estado.cs
 |   `-- APD.cs
 `-- Parte3/                        # Modulo MT
     |-- Parte3.csproj
+    |-- Parte3.sln
     `-- MT.cs
 ```
 
@@ -43,7 +49,7 @@ ftc-20261-final/
 - **SDK:** .NET 8 (`net8`)
 - **Interface de terminal:** Spectre.Console
 - **Build e execucao:** `dotnet` CLI com projetos no formato SDK (`.csproj`)
-- **Solucoes:** `.sln` (por modulo) e `.slnx` (solucao principal)
+- **Solucoes:** `.sln` (por modulo, para build individual) e `.slnx` (solucao principal que agrega todos os projetos)
 
 ## 4. Como Executar
 ### Pre-requisitos
@@ -72,7 +78,8 @@ Fluxo principal:
 1. O `Program.cs` exibe o menu utilizando o `Spectre.Console`.
 2. O usuário escolhe uma opção (`AFD`, `APD`, `MT` ou `Sair`).
 3. O módulo correspondente é executado (`AFDScreen.Show()`, `APDScreen.Show()`, `MTScreen.Show()`).
-4. As telas dentro da pasta `Screen` servem como uma forma organizada de separar cada layout e são utilizadas para que o usuário possa interagir com a lógica de cada módulo.
+4. As telas dentro da pasta `Screens` servem como uma forma organizada de separar cada layout e são utilizadas para que o usuário possa interagir com a lógica de cada módulo.
+5. A pasta `Utils` contém o `FilePicker`, um seletor de arquivos TUI que permite ao usuário navegar no sistema de arquivos e selecionar arquivos de teste diretamente pelo terminal.
 
 Essa organizacao facilita evolucao incremental por parte (cada modulo pode crescer sem acoplamento excessivo com os demais).
 
@@ -80,13 +87,13 @@ Essa organizacao facilita evolucao incremental por parte (cada modulo pode cresc
 - **Separacao de responsabilidades (SoC):** interface concentrada em `Parte0`, com execucao dos modulos em projetos dedicados.
 - **Modularidade:** cada tema (AFD/APD/MT) esta isolado em seu proprio projeto.
 - **Baixo acoplamento entre modulos:** integracao feita apenas pela aplicacao principal (`Parte0`).
-- **Ponto de acesso simplificado (estilo Facade):** classes `AFD`, `APD` e `MT` expoem `Executar()` como entrada publica.
+- **Ponto de acesso simplificado (estilo Facade):** classes de dominio expoem metodos publicos como entrada: `AFD.Aceitar()` / `AFD.ObterTransicoes()`, `APD.Executar()` e `MT.Executar()`.
 - **Fluxo legivel e direto (Clean Code):** menu central com `switch` explicito e classes de tela separadas.
 
 Estado atual observado no codigo:
 - Boa base de organizacao para expansao.
-- Metodos de dominio ainda estao em estagio inicial, com saidas de placeholder.
-- Ha repeticao entre telas (`AFDScreen`, `APDScreen`, `MTScreen`), com potencial de extracao para componente reutilizavel.
+- Os tres modulos (AFD, APD, MT) estao totalmente implementados com simuladores funcionais.
+- As telas (`AFDScreen`, `APDScreen`, `MTScreen`) compartilham um padrao comum de header e menu, mas cada uma possui logica de interacao especifica ao seu modelo (ex.: `MTScreen` configura duas MTs distintas; `APDScreen` permite selecionar entre linguagens L2 e L3).
 
 ## 7. Dependencias
 - `Spectre.Console` `0.55.2`

@@ -6,7 +6,7 @@ namespace Parte0.Screens;
 
 public class APDScreen
 {
-   public static void apdUiUx()
+   public static void Show()
     {
         APD apd = new APD();
         while (true)
