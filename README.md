@@ -32,15 +32,18 @@ ftc-20261-final/
 |-- Parte1/                        # Modulo AFD
 |   |-- Parte1.csproj
 |   |-- Parte1.sln
+|   |-- reflexiva.md
 |   `-- AFD.cs
 |-- Parte2/                        # Modulo APD
 |   |-- Parte2.csproj
 |   |-- Parte2.sln
 |   |-- Estado.cs
+|   |-- reflexiva.md
 |   `-- APD.cs
 `-- Parte3/                        # Modulo MT
     |-- Parte3.csproj
     |-- Parte3.sln
+|   |-- reflexiva.md
     `-- MT.cs
 ```
 
