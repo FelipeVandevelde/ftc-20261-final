@@ -84,8 +84,8 @@ public class MTScreen
                 AnsiConsole.WriteLine();
                 AnsiConsole.MarkupLine("[grey] Maquina transdutora da função f(n) = n + 1[/]");
                 AnsiConsole.MarkupLine("[grey] Q = {0,1,rej}[/]");
-                AnsiConsole.MarkupLine("[grey] Σ = {0,1}[/]");
-                AnsiConsole.MarkupLine("[grey] Γ = {0,1,_}[/]");
+                AnsiConsole.MarkupLine("[grey] Σ = {1}[/]");
+                AnsiConsole.MarkupLine("[grey] Γ = {1,_}[/]");
                 AnsiConsole.MarkupLine("[grey] q0 = 0[/]");
                 AnsiConsole.MarkupLine("[grey] qaccept = 1[/]");
                 AnsiConsole.MarkupLine("[grey] qreject = rej[/]");
@@ -94,7 +94,6 @@ public class MTScreen
                 table.Rows.Clear();
                 table.AddRow("0", "1", "0", "1", "R");
                 table.AddRow("0", "_", "1", "1", "R");
-                table.AddRow("0", "0", "1", "1", "R");
                 AnsiConsole.Write(table);
 
                 AnsiConsole.WriteLine();
@@ -151,19 +150,20 @@ public class MTScreen
                 // Configura a MT com os estados, alfabeto, transições e outros parâmetros necessários
                 var mtt = new MT();
                 mtt.LimitePassos = int.Parse(AnsiConsole.Ask<string>("Digite o [yellow]limite de passos[/]: ")); // Limite de passos configuravel para evitar loops infinitos
-                entrada = AnsiConsole.Ask<string>("Digite a [yellow]palavra[/] de entrada (use _ para branco): "); // Entrada da palavra teste do usuário
+                entrada = AnsiConsole.Prompt(
+                    new TextPrompt<string>("Digite a [yellow]palavra[/] de entrada (use _ para branco): ")
+                    .AllowEmpty()); // Entrada da palavra teste do usuário
 
                 mtt.MTReconhecedora = false; // Define que é uma máquina reconhecedora ou transdutora (Definido para facilitar a exibição do resultado final formatado, sem precisar criar uma classe
                 mtt.AdicionarEstados("0", "1", "rej"); // Estados da MT
-                mtt.AdicionarAlfabetoEntrada('0', '1'); // Alfabeto de entrada
-                mtt.AdicionarAlfabetoFita('0', '1', '_'); // Alfabeto da fita (inclui branco)
+                mtt.AdicionarAlfabetoEntrada('1'); // Alfabeto de entrada
+                mtt.AdicionarAlfabetoFita('1', '_'); // Alfabeto da fita (inclui branco)
                 mtt.EstadoInicial = mtt.ObterEstado("0"); // Estado inicial
                 mtt.EstadoAceitacao = mtt.ObterEstado("1"); // Estado de aceitação
                 mtt.EstadoRejeicao = mtt.ObterEstado("rej") ; // Estado de rejeição
                 // Transições da MT no formato (EstadoAtual, SimboloLido, NovoEstado, NovoSimbolo, Direcao)
                 mtt.AdicionarTransicao("0", '1', "0", '1', 'R');
                 mtt.AdicionarTransicao("0", '_', "1", '1', 'R');
-                mtt.AdicionarTransicao("0", '0', "1", '1', 'R');
 
                 Execute(entrada, mtt); // Chamada do método para executar a MT e exibir o resultado formatado
 

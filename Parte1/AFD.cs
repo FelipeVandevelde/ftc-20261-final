@@ -24,15 +24,6 @@ public class AFD
         F = "q2";
     }
 
-    /*public AFD(string[] q, char[] σ, string[] t, string i, string f)
-    {
-        Q = q;
-        Σ = σ;
-        δ = t;
-        I = i;
-        F = f;
-    }*/
-
     public record AFDInfo(
         string[] Q,
         char[] Σ,
