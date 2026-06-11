@@ -1,5 +1,5 @@
 # FTC 2026/1 - Projeto Final
-Repositorio academico da disciplina FTC, organizado como solucao .NET modular com interface de terminal e componentes separados para AFD, APD e MT.
+Repositorio academico da disciplina FTC, organizado como solucao .NET modular com interface de terminal e componentes separados para AFD, APD e MT. Para assistir a apresentação, acesse este [link no youtube](https://youtu.be/bYzJFopqj9o).
 
 ## 1. Integrantes
 - Felipe Vandevelde - 72301201
@@ -13,7 +13,7 @@ ftc-20261-final/
 |-- LICENSE
 |-- README.md
 |-- docs/
-|   `-- relatorio.md
+|   `-- FTC_final.pdf
 |-- exemplos/                      # Casos de teste do pdf
 |   |-- entradas_af.txt            # Entradas para o AFD
 |   |-- entradas_ap1.txt           # Entradas para o APD (L2 = a^n b^n)
